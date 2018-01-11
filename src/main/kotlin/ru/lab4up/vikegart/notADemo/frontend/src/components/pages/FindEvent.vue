@@ -36,26 +36,11 @@
                                 <v-list-tile @click="onNextWeek">
                                     <v-list-tile-title>На след. неделю</v-list-tile-title>
                                 </v-list-tile>
-                                <v-list-tile @click="">
-                                    <v-dialog
-                                            persistent
-                                            v-model="modal"
-                                            lazy
-                                            full-width>
-                                        <v-list-tile-title slot="activator">выбрать дату... </v-list-tile-title>
-                                        <v-date-picker
-                                                v-model="datePicked"
-                                                scrollable
-                                                first-day-of-week="1"
-                                                locale="ru-RU"
-                                                > <!--autosave убрал, так как есть кнопки-->
-                                            <template scope="{ save, cancel }">
-                                                <v-card-actions>
-                                                    <v-btn flat primary @click.native="save()">Сохранить</v-btn>
-                                                </v-card-actions>
-                                            </template>
-                                        </v-date-picker>
-                                    </v-dialog>
+                                <v-list-tile @click="dataPickerDialog = !dataPickerDialog">
+                                  <v-list-tile-title>Выбрать дату</v-list-tile-title>
+                                  <v-dialog v-model="dataPickerDialog" maxWidth="290px">
+                                    <v-date-picker v-model="picker" autosave></v-date-picker>
+                                  </v-dialog>
                                 </v-list-tile>
                             </v-list>
                         </v-menu>
@@ -136,6 +121,8 @@
             freeOnly: false,
             alertAboutLogin: false,
             cachedScroll: null,
+            dataPickerDialog: false,
+            picker: null
         }),
         computed: {
             events: function() {
