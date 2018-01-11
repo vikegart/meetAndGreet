@@ -30,6 +30,14 @@
             <v-list-tile-title>http</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <v-list-tile href="/events">
+          <v-list-tile-action>
+            <v-icon>edit_location</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>events</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar color="indigo" dark fixed app>
