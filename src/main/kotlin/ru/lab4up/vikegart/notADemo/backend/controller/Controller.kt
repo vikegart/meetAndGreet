@@ -21,4 +21,9 @@ class Controller {
     fun greeting(@RequestParam(value = "name", defaultValue = "World") name: String): Greeting {
         return Greeting(counter.incrementAndGet(),"Hello, $name")
     }
+
+    @GetMapping("/events")
+    fun allEvents(): ModelAndView {
+        return ModelAndView("forward://index.html")
+    }
 }

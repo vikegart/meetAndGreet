@@ -2,7 +2,7 @@
     <v-container fluid>
         <div class="metoo-create-container">
 
-            <v-card class="grey lighten-4 elevation-0">
+            <v-card>
                 <v-container grid-list-md>
                     <v-form v-model="valid" ref="form">
                     <v-layout row wrap>
