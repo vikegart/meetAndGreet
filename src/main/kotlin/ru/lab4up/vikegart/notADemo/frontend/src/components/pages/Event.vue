@@ -37,16 +37,10 @@
                                 <p class="text-sm-left metoo-cart-info-description">{{ event.description | descriptionFormatter}} </p>
                             </v-flex>
                         </v-layout>
-                        <v-flex xs12>
-                            <v-btn icon class="ml-0 mr-0 metoo-card-info-icons" @click="toggleFavoriteEvent(event)">
-                                <v-icon large :class="{ 'orange--text': event.isFavorites }">
-                                    {{ event.isFavorites | favoriteIcon }}
-                                </v-icon>
-                            </v-btn>
-                        </v-flex>
                     </v-card-title>
                 </v-card>
             </v-layout>
+
         </v-flex>
     </v-container>
 
@@ -122,22 +116,7 @@
                         if (event !== undefined) { this.event = event }*/
 
                         // после уже делаем запрос на сервер за эвентом и заодно пишем историю
-                        let csrf = this.$root.$store.state.system.csrf.content;
-                        api.events.getEvent(id, {headers: {'X-XSRF-TOKEN': csrf }} ).then(
-                            response => { // success callback
-                                let event = JSON.parse(response.bodyText);
-                                event.startDate = moment(event.startDate, "DD.MM.YY");
-                                this.event = event;
-                            },
-                            response => { // error callback
-                                console.log("Error get event ");
-                                console.log(response);
-
-                                if (event === undefined) {
-                                    this.event = emptyEvent
-                                }
-                            }
-                        );
+                        this.event = emptyEvent
                     }
                 }
             }

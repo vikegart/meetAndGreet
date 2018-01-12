@@ -31,7 +31,7 @@
                                     <v-layout row>
                                         <div class="metoo-event-card-title-date">
                                             <p class="metoo-cart-date-text"> {{event.startDate}}  </p>
-                                            <p class="metoo-cart-day-of-week-text"> {{event.startDate}} </p>
+                                            <p class="metoo-cart-day-of-week-text">ПН</p>
                                             <p class="metoo-cart-time-text "> {{event.startTime}} </p>
                                         </div>
                                         <v-flex class="metoo-event-card-title-info">
@@ -69,7 +69,7 @@
             picker: null,
             events: [],
         }),
-        /*computed: {
+        computed: {
             events: function() {
                 let events = this.$root.$store.state.events.events;
 
@@ -90,50 +90,9 @@
                 }, this)// передаем vue экземпляр для callback
             },
 
-            datePicked : {
-                get : function () {
-                    return moment(this.dateFrom);
-                },
-                set : function (value) {
-                    this.dateFrom = moment(value).add(12, 'h');
-                    this.dateTo = moment(value).add(12, 'h');
 
-                }
-            },
-            chosenDate : function () {
-                let today = moment();
-                let tomorrow = today.clone();
-                tomorrow.date(tomorrow.date()+1);
-
-                if (this.dateFrom.isSame(today, 'day') && this.dateTo.isSame(today, 'day')){
-                    return 'На сегодня';
-                } else
-                if (this.dateFrom.isSame(tomorrow, 'day') && this.dateTo.isSame(tomorrow, 'day')){
-                    return 'На завтра';
-                } else
-                if (this.dateFrom.day() == 6 && this.dateTo.day() == 0){ //если от субботы до вскр
-                    return 'На выходные';
-                } else
-                if ((this.dateFrom.isSame(moment().day(1), 'day') // TODO
-                    && this.dateTo.isSame(moment().day(7), 'day') && today.day() != 0)
-                    || (today.day() == 0 && this.dateFrom.isSame(today.clone().day(-6), 'day') && !(this.dateFrom.isSame(this.dateTo, 'day')))){
-                    return 'На эту неделю';
-                } else
-                if ((this.dateFrom.isSame(moment().day(1+7), 'day') // TODO
-                    && this.dateTo.isSame(moment().day(7+7), 'day')
-                    && today.day() != 0) ||
-                    (today.day() == 0 && this.dateFrom.isSame(today.clone().day(1), 'day')
-                    && !(this.dateFrom.isSame(this.dateTo, 'day')))) {
-                    return 'На след. неделю';
-                } else
-                if (this.dateFrom.isSame(this.datePicked, 'day')
-                    && this.dateTo.isSame(this.datePicked, 'day')){
-                    this.dateFrom.locale('ru');
-                    return this.dateFrom.format("ddd, D, MMMM")
-                }
-            }
-        },*/
-        /*filters: {
+        },
+        filters: {
             favoriteIcon: function (date) {
                 if (date) {     return 'star';
                 } else {        return 'star_border'; }
@@ -153,7 +112,7 @@
                     return cDate.locale('ru').format('D MMMM');
                 }
             }
-        },*/
+        },
         methods: {
             switchPage: function(link) {
                 this.$root.$router.push({ path: link });
