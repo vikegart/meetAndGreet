@@ -12,39 +12,6 @@
                     <v-flex xs12 sm12 class="pt-4">
                         <v-checkbox label="Только бесплатные" hide-details v-model="freeOnly" class="metoo-filter-checkbox pt-0"></v-checkbox>
                     </v-flex>
-                    <v-flex xs12 sm12 style="margin-top: -5px">
-                        <v-menu>
-                            <div slot="activator">
-                                <v-btn icon class="metoo-filter-date-btn"> <v-icon>event</v-icon> </v-btn>
-                                <span style="color: rgba(0, 0, 0, 0.68); font-size: 14px;">
-                                      {{chosenDate}} <v-icon>arrow_drop_down</v-icon>
-                                </span>
-                            </div>
-                            <v-list>
-                                <v-list-tile @click="onToday">
-                                    <v-list-tile-title>На сегодня</v-list-tile-title>
-                                </v-list-tile>
-                                <v-list-tile @click="onTomorrow">
-                                    <v-list-tile-title>На завтра</v-list-tile-title>
-                                </v-list-tile>
-                                <v-list-tile @click="onWeekends">
-                                    <v-list-tile-title>На выходные</v-list-tile-title>
-                                </v-list-tile>
-                                <v-list-tile @click="onCurrWeek">
-                                    <v-list-tile-title>На эту неделю</v-list-tile-title>
-                                </v-list-tile>
-                                <v-list-tile @click="onNextWeek">
-                                    <v-list-tile-title>На след. неделю</v-list-tile-title>
-                                </v-list-tile>
-                                <v-list-tile @click="dataPickerDialog = !dataPickerDialog">
-                                  <v-list-tile-title>Выбрать дату</v-list-tile-title>
-                                  <v-dialog v-model="dataPickerDialog" maxWidth="290px">
-                                    <v-date-picker v-model="picker" autosave></v-date-picker>
-                                  </v-dialog>
-                                </v-list-tile>
-                            </v-list>
-                        </v-menu>
-                    </v-flex>
                 </v-layout>
             </v-flex>
         </div>
@@ -63,25 +30,17 @@
                                 <v-card-title class="metoo-card-title pl-0 pr-0">
                                     <v-layout row>
                                         <div class="metoo-event-card-title-date">
-                                            <p class="metoo-cart-date-text"> {{event.startDate | dateFormatter }}  </p>
-                                            <p class="metoo-cart-day-of-week-text"> {{event.startDate | dayOfWeekFormatter }} </p>
+                                            <p class="metoo-cart-date-text"> {{event.startDate}}  </p>
+                                            <p class="metoo-cart-day-of-week-text"> {{event.startDate}} </p>
                                             <p class="metoo-cart-time-text "> {{event.startTime}} </p>
                                         </div>
                                         <v-flex class="metoo-event-card-title-info">
                                             <div class="metoo-event-card-title-info-text mb-0 mt-0" > {{event.title}} </div>
-                                            <p class="text-sm-left subheading grey--text">{{event.price | priceFormatter}}</p>
+                                            <p class="text-sm-left subheading grey--text">{{event.price}}</p>
                                         </v-flex>
                                     </v-layout>
                                 </v-card-title>
                             </div>
-                            <v-card-actions class="white pt-0 pb-2 pr-1">
-                                <v-spacer></v-spacer>
-                                <v-btn icon @click="toggleFavoriteEvent(event)">
-                                    <v-icon medium :class="{ 'orange--text': event.isFavorites }">
-                                        {{ event.isFavorites | favoriteIcon }}
-                                    </v-icon>
-                                </v-btn>
-                            </v-card-actions>
                         </v-card>
                     </v-flex>
                 </v-flex>
@@ -94,7 +53,7 @@
 
 <script>
     import moment from 'moment';
-    import api from '../../api';
+    /*import api from '../../api';*/
 
     export default {
         name: 'find-event',
@@ -107,9 +66,10 @@
             alertAboutLogin: false,
             cachedScroll: null,
             dataPickerDialog: false,
-            picker: null
+            picker: null,
+            events: [],
         }),
-        computed: {
+        /*computed: {
             events: function() {
                 let events = this.$root.$store.state.events.events;
 
@@ -172,8 +132,8 @@
                     return this.dateFrom.format("ddd, D, MMMM")
                 }
             }
-        },
-        filters: {
+        },*/
+        /*filters: {
             favoriteIcon: function (date) {
                 if (date) {     return 'star';
                 } else {        return 'star_border'; }
@@ -193,7 +153,7 @@
                     return cDate.locale('ru').format('D MMMM');
                 }
             }
-        },
+        },*/
         methods: {
             switchPage: function(link) {
                 this.$root.$router.push({ path: link });
@@ -257,7 +217,20 @@
             '$route': 'scrollPage' //когда мы вернулись сюда с другой страницы (изменился маршрут)
         },
         created () {
-            this.$root.$store.dispatch('loadEvents'); //TODO 6.10.17 Вынести в отдельный API?
+          this.$http.get('http://127.0.0.1:8033/events').then(response => {
+            let getEvents = JSON.parse(response.bodyText);
+            console.log(getEvents);
+            console.log(getEvents.content);
+            this.events  = getEvents.content;
+            // get body data
+
+
+          }, response => {
+            console.log(' err response begin')
+            console.log(response)
+            console.log(' err response ending')
+          });
+            /*this.$root.$store.dispatch('loadEvents');*/ //TODO 6.10.17 Вынести в отдельный API?
 
         },
         beforeRouteLeave (to, from, next) { //когда уходим со страницы, сохраняем текущий скролл

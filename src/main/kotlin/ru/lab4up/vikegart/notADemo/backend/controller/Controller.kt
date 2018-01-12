@@ -24,6 +24,7 @@ class Controller {
         return Greeting(counter.incrementAndGet(),"Hello, $name")
     }
 
+    @CrossOrigin(origins = arrayOf("http://localhost:8080", "http://127.0.0.1:8080"))
     @GetMapping("/events")
     fun allEvents(): EventsList {
         var i:Long = 0

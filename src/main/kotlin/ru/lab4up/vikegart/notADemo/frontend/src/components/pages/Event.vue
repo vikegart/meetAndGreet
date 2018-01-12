@@ -48,25 +48,6 @@
                 </v-card>
             </v-layout>
         </v-flex>
-        <!--<v-snackbar-->
-                <!--multi-line-->
-                <!--:timeout="45000"-->
-                <!--v-model="alertAboutLogin">-->
-            <!--Войдите через-->
-            <!--<a href="/connect/google" class="pink&#45;&#45;text" style="font-size: 14px; padding-right: 5px; font-weight: 500;"> Google  </a>-->
-            <!--или-->
-            <!--<a href="/connect/google" class="pink&#45;&#45;text" style="font-size: 14px; padding-right: 5px; font-weight: 500;"> VK </a>-->
-            <!--чтобы добавить в закладки-->
-            <!--<v-btn dark flat class="pink&#45;&#45;text" @click.native="alertAboutLogin = false">Закрыть</v-btn>-->
-        <!--</v-snackbar>-->
-
-        <v-alert color="warning" hide-icon dismissible xs12 md6 lg6 v-model="alertAboutLogin"
-                 style="position: fixed; bottom: 0px; margin: 0px; padding-top: 6px; padding-bottom: 6px; color: #212121;">
-            Войдите через
-            <a href="/connect/google" class="pink--text" style="font-size: 14px; padding-right: 5px; font-weight: 500;"> Google  </a> или
-            <a href="/connect/vk" class="pink--text" style="font-size: 14px; padding-right: 5px; font-weight: 500;"> VK </a>
-            чтобы добавить в закладки
-        </v-alert>
     </v-container>
 
 </template>
@@ -75,13 +56,12 @@
 
 <script>
     import moment from 'moment';
-    import api from '../../api';
+    /*import api from '../../api';*/
 
     export default {
         name: 'event',
         data: () => ({
             event: {},
-            alertAboutLogin: false
         }),
         filters: {
             scrFormatter: function (date) {
@@ -124,43 +104,6 @@
             }
         },
         methods: {
-            toggleFavoriteEvent: function (event) {
-                if (this.$root.$store.state.users.user == null) {
-                    this.alertAboutLogin = true;
-                } else {
-                    /*this.$root.$store.dispatch('toggleFavoriteEvent', event);*/
-                    if (!event.isFavorites) {
-                        let csrf = this.$root.$store.state.system.csrf.content;
-                        api.events.addToFavorites(event.id, {headers: {'X-XSRF-TOKEN': csrf}}).then(
-                            response => { // success callback
-                                let event = JSON.parse(response.bodyText);
-                                event.startDate = moment(event.startDate, "DD.MM.YY");
-                                this.$root.$store.commit('EVENT_SET', event);
-                            },
-                            response => { // error callback
-                                console.log("Error add to favorites ");
-                                console.log(response);
-                            }
-                        );
-                    } else
-                    if (event.isFavorites) {
-                        let csrf = this.$root.$store.state.system.csrf.content;
-                        api.events.deleteFromFavorites(event.id, {headers: {'X-XSRF-TOKEN': csrf}}).then(
-                            response => { // success callback
-                                let event = JSON.parse(response.bodyText);
-                                event.startDate = moment(event.startDate, "DD.MM.YY");
-                                this.$root.$store.commit('EVENT_SET', event);
-                            },
-                            response => { // error callback
-                                console.log("Error delete to favorites ");
-                                console.log(response);
-                            }
-                        );
-                    }
-                    this.event.isFavorites = !event.isFavorites;
-
-                }
-            },
             loadEvent: function () {
                 if (this.$root.$route.name == "event") {
                     scrollTo(0,20);
@@ -174,9 +117,9 @@
                     let id = this.$root.$route.params.id;
                     if (id !== undefined) {
 
-                        // Пробуем получит эвент из нашего списка сначала, это быстрее
+                       /* // Пробуем получит эвент из нашего списка сначала, это быстрее
                         let event  = this.$root.$store.getters.getEventById(id);
-                        if (event !== undefined) { this.event = event }
+                        if (event !== undefined) { this.event = event }*/
 
                         // после уже делаем запрос на сервер за эвентом и заодно пишем историю
                         let csrf = this.$root.$store.state.system.csrf.content;
