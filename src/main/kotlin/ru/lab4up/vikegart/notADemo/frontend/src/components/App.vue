@@ -62,14 +62,14 @@
              bottom
              right
              v-show="showBtnUp"
-             class='cyan darken-1'
+             class='indigo'
              v-on:click="scrollToTop"
       >
         <v-icon>keyboard_arrow_up</v-icon>
       </v-btn>
     </v-fab-transition>
     <v-footer color="indigo" app>
-      <span class="white--text">&copy; 2018</span>
+      <span class="white--text">&copy; course project. 2018</span>
     </v-footer>
   </v-app>
 </template>
@@ -81,9 +81,6 @@
       showBtnUp: false,
       offsetTop: 0,
     }),
-    props: {
-      source: String
-    },
 
     methods: {
       scrollToTop: function () {

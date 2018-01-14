@@ -26,7 +26,7 @@
                         </v-flex>
                         <v-layout row>
                             <div class="metoo-event-info-card-title-left-panel">
-                                <p class="metoo-cart-info-date-text"> {{event.startDate | dateFormatter }}  </p>
+                                <p class="metoo-cart-info-date-text"> {{event.startDate}}  </p>
                                 <p class="metoo-cart-info-day-of-week-text"> {{event.startDate | dayOfWeekFormatter }} </p>
                                 <p class="metoo-cart-info-time-text "> {{event.startTime}} </p>
                                 <br />
@@ -56,6 +56,7 @@
         name: 'event',
         data: () => ({
             event: {},
+            events: [],
         }),
         filters: {
             scrFormatter: function (date) {
@@ -76,10 +77,11 @@
                 return (date == 0 ? "Бесплатно" : date  + "р");
             },
             dayOfWeekFormatter: function (date) {
-                if (date !== undefined) {
-                    let cDate = date.clone();
-                    return cDate.locale('ru').format('dd').toUpperCase();
-                }
+              if (date !== undefined) {
+
+                let cDate = moment(date, "DD.MM.YYYY");
+                return cDate.locale('ru').format('dd').toUpperCase();
+              }
             },
             dateFormatter: function (date) {
                 if (date !== undefined) {
@@ -107,16 +109,35 @@
                         description:"Такой встречи нет. Не повезло. " ,
                         src: 'https://pp.userapi.com/c836324/v836324134/655b0/VlgO6dfohc8.jpg'
                     };
+                  let Elevent1 = {
+                    id: "1414",
+                    title: 'Прогулка с Элли',
+                    description:"Болтовная в кофейне" ,
+                    src: 'https://i.ytimg.com/vi/xLaeOrDmWQ4/hqdefault.jpg',
+                    startDate: "14.01.2018",
+                    startTime: "19:00",
+                    price: 0,
+                    location: "Coffe 3",
+
+                  };
+                  let Elevent2 = {
+                    id: "2805",
+                    title: 'Прогулка с Элли',
+                    description:"Болтовная в кофейне" ,
+                    src: 'https://i.ytimg.com/vi/xLaeOrDmWQ4/hqdefault.jpg',
+                    startDate: "15.01.2018",
+                    startTime: "19:00",
+                    price: 0,
+                    location: "Coffe 3",
+
+                  };
 
                     let id = this.$root.$route.params.id;
-                    if (id !== undefined) {
-
-                       /* // Пробуем получит эвент из нашего списка сначала, это быстрее
-                        let event  = this.$root.$store.getters.getEventById(id);
-                        if (event !== undefined) { this.event = event }*/
-
-                        // после уже делаем запрос на сервер за эвентом и заодно пишем историю
-                        this.event = emptyEvent
+                    if (id == 1414){
+                      this.event = Elevent1
+                    }
+                    if (id ==2805){
+                      this.event = Elevent2
                     }
                 }
             }

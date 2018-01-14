@@ -31,7 +31,7 @@
                                     <v-layout row>
                                         <div class="metoo-event-card-title-date">
                                             <p class="metoo-cart-date-text"> {{event.startDate}}  </p>
-                                            <p class="metoo-cart-day-of-week-text">ПН</p>
+                                            <p class="metoo-cart-day-of-week-text">{{event.startDate | dayOfWeekFormatter}}</p>
                                             <p class="metoo-cart-time-text "> {{event.startTime}} </p>
                                         </div>
                                         <v-flex class="metoo-event-card-title-info">
@@ -70,7 +70,7 @@
             events: [],
         }),
         computed: {
-            events: function() {
+            /*events: function() {
                 let events = this.$root.$store.state.events.events;
 
                 return events.filter(function (event) {
@@ -88,7 +88,7 @@
 
                     return flag;
                 }, this)// передаем vue экземпляр для callback
-            },
+            },*/
 
 
         },
@@ -102,7 +102,8 @@
             },
             dayOfWeekFormatter: function (date) {
                 if (date !== undefined) {
-                    let cDate = date.clone();
+
+                    let cDate = moment(date, "DD.MM.YYYY");
                     return cDate.locale('ru').format('dd').toUpperCase();
                 }
             },
@@ -180,7 +181,7 @@
             let getEvents = JSON.parse(response.bodyText);
             console.log(getEvents);
             console.log(getEvents.content);
-            this.events  = getEvents.content;
+            /*this.events  = getEvents.content;*/
             // get body data
 
 
@@ -190,6 +191,29 @@
             console.log(' err response ending')
           });
             /*this.$root.$store.dispatch('loadEvents');*/ //TODO 6.10.17 Вынести в отдельный API?
+          let Elevent1 = {
+            id: "1414",
+            title: 'Прогулка с Элли',
+            description:"Болтовная в кофейне" ,
+            src: 'https://i.ytimg.com/vi/xLaeOrDmWQ4/hqdefault.jpg',
+            startDate: "14.01.2018",
+            startTime: "19:00",
+            price: "for free :)",
+            location: "Coffe 3",
+
+          };
+          let Elevent2 = {
+            id: "2805",
+            title: 'Прогулка с Элли',
+            description:"Болтовная в кофейне" ,
+            src: 'https://i.ytimg.com/vi/xLaeOrDmWQ4/hqdefault.jpg',
+            startDate: "15.01.2018",
+            startTime: "19:00",
+            price: "for free :)",
+            location: "Coffe 3",
+
+          };
+          this.events = [Elevent1, Elevent2];
 
         },
         beforeRouteLeave (to, from, next) { //когда уходим со страницы, сохраняем текущий скролл

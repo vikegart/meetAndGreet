@@ -2,26 +2,18 @@ package ru.lab4up.vikegart.notADemo
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
-import java.util.concurrent.atomic.AtomicLong
 import org.springframework.web.servlet.ModelAndView
 import ru.lab4up.vikegart.notADemo.backend.model.Event
 import ru.lab4up.vikegart.notADemo.backend.model.EventsList
-import ru.lab4up.vikegart.notADemo.backend.model.Greeting
 
 
 @RestController
 class Controller {
-    val counter = AtomicLong()
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/")
     fun mainPage(): ModelAndView {
         return ModelAndView("forward://index.html")
-    }
-
-    @GetMapping("/greeting")
-    fun greeting(@RequestParam(value = "name", defaultValue = "World") name: String): Greeting {
-        return Greeting(counter.incrementAndGet(),"Hello, $name")
     }
 
     @CrossOrigin(origins = arrayOf("http://localhost:8080", "http://127.0.0.1:8080"))
