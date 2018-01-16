@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import ru.lab4up.vikegart.notADemo.backend.model.Event
-import ru.lab4up.vikegart.notADemo.backend.model.EventsList
+import ru.lab4up.vikegart.notADemo.backend.model.EventsRepository
 
 
 @RestController
@@ -16,9 +16,9 @@ class Controller {
         return ModelAndView("forward://index.html")
     }
 
-    @CrossOrigin(origins = arrayOf("http://localhost:8080", "http://127.0.0.1:8080"))
+    /*@CrossOrigin(origins = arrayOf("http://localhost:8080", "http://127.0.0.1:8080"))
     @GetMapping("/events")
-    fun allEvents(): EventsList {
+    fun allEvents(): EventsRepository {
         var i:Long = 0
         val events = mutableListOf<Event>()
         while (i<5){
@@ -26,15 +26,15 @@ class Controller {
             i++
         }
         //TODO: сделать это сервисом и прикрутить базу данных
-        return EventsList(events)
-    }
+        return EventsRepository(events)
+    }*/
 
-    @CrossOrigin(origins = arrayOf("http://localhost:8080", "http://127.0.0.1:8080"))
+    /*@CrossOrigin(origins = arrayOf("http://localhost:8080", "http://127.0.0.1:8080"))
     @GetMapping("/event/")
     fun getEvent(@RequestParam(value = "id", defaultValue = "0") id: Long): Event {
         //найти ивент по id
         //сходить в базу?
         return Event(id,"название", "ссылка на картину", 0, "18.05.18", "10:00", "saratov" )
-    }
+    }*/
 
 }
