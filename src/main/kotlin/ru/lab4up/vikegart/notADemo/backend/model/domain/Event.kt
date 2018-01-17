@@ -11,9 +11,9 @@ class Event(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
         val id: Long,
-        val title: String="",
-        val src: String="",
-        val price: Long=0,
-        val startDate: String="",
-        val startTime: String="",
-        val location: String="")
+        val title: String,
+        val src: String,
+        val price: Long,
+        val startDate: String,
+        val startTime: String,
+        val location: String)

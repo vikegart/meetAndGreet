@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import ru.lab4up.vikegart.notADemo.backend.model.Event
-import ru.lab4up.vikegart.notADemo.backend.model.EventsRepository
 
 
 @RestController
