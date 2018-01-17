@@ -93,10 +93,6 @@
 
         },
         filters: {
-            favoriteIcon: function (date) {
-                if (date) {     return 'star';
-                } else {        return 'star_border'; }
-            },
             priceFormatter: function (date) {
                 return (date == 0 ? "Бесплатно" : date  + "р");
             },
@@ -118,59 +114,10 @@
             switchPage: function(link) {
                 this.$root.$router.push({ path: link });
             },
-
-            // For datePicker
-            onToday: function () {
-                this.dateFrom = moment();
-                this.dateTo = this.dateFrom;
-            },
-            onTomorrow: function () {
-                let today = moment();
-                this.dateFrom = today.date(today.date()+1);
-                this.dateTo = this.dateFrom;
-            },
-            onWeekends: function () {
-                let today = moment();
-                let yesterday = today.clone();
-                yesterday.date(yesterday.date()-1);
-
-                if (today.day() == 0){ //если сегодня воскресенье
-                    this.dateFrom = yesterday;
-                    this.dateTo = today;
-                } else {
-                    this.dateFrom = today.clone().day(6);
-                    this.dateTo = today.clone().day(7);
-                }
-            },
-            onCurrWeek: function () {
-                let today = moment();
-
-
-
-                if (today.day() == 0){ //если сегодня воскресенье
-                    this.dateFrom = today.clone().day(-6);
-                    this.dateTo = today;
-                } else {
-                    this.dateFrom = today.clone().day(1);
-                    this.dateTo = today.clone().day(7);
-                }
-            },
-            onNextWeek: function () {
-                let today = moment();
-
-                if (today.day() == 0){ //если сегодня воскресенье
-                    this.dateFrom = today.clone().day(1);
-                    this.dateTo = today.day(7);
-                } else {
-                    this.dateFrom = today.clone().day(1+7);
-                    this.dateTo = today.clone().day(7+7);
-                }
-            },
             scrollPage: function () {
                 if (this.$root.$route.name == "find") {
                     scrollTo(0,this.cachedScroll);
                 }
-
             }
         },
         watch: {
@@ -179,10 +126,10 @@
         created () {
           this.$http.get('http://127.0.0.1:8033/events').then(response => {
             let getEvents = JSON.parse(response.bodyText);
-            console.log(getEvents);
-            console.log(getEvents.content);
-            /*this.events  = getEvents.content;*/
-            // get body data
+            let eventsArray = getEvents._embedded.events;
+            console.log(eventsArray);
+            this.events  = eventsArray;
+            //TODO: положить это в метод
 
 
           }, response => {
@@ -190,31 +137,6 @@
             console.log(response)
             console.log(' err response ending')
           });
-            /*this.$root.$store.dispatch('loadEvents');*/ //TODO 6.10.17 Вынести в отдельный API?
-          let Elevent1 = {
-            id: "1414",
-            title: 'Прогулка с Элли',
-            description:"Болтовная в кофейне" ,
-            src: 'https://i.ytimg.com/vi/xLaeOrDmWQ4/hqdefault.jpg',
-            startDate: "14.01.2018",
-            startTime: "19:00",
-            price: "for free :)",
-            location: "Coffe 3",
-
-          };
-          let Elevent2 = {
-            id: "2805",
-            title: 'Прогулка с Элли',
-            description:"Болтовная в кофейне" ,
-            src: 'https://i.ytimg.com/vi/xLaeOrDmWQ4/hqdefault.jpg',
-            startDate: "15.01.2018",
-            startTime: "19:00",
-            price: "for free :)",
-            location: "Coffe 3",
-
-          };
-          this.events = [Elevent1, Elevent2];
-
         },
         beforeRouteLeave (to, from, next) { //когда уходим со страницы, сохраняем текущий скролл
             this.cachedScroll = window.pageYOffset;
