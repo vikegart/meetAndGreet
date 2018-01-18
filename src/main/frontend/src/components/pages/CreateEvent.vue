@@ -32,7 +32,7 @@
                                     name="description"
                                     label="Описание"
                                     :counter="600"
-                                    multi-line> <!--:rules="[ function() {return event.description.length <= 600 || 'Нужно уложиться в 600 символов'}]"-->
+                                    multi-line>
                             </v-text-field>
                         </v-flex>
                     </v-layout>
@@ -63,7 +63,7 @@
                             <v-text-field
                                     box
                                     v-model="event.price"
-                                    :rules="[ function() {return event.price.length <= 42 || 'Нужно уложиться в 42 символа'}]"
+                                    :rules="priceRules"
                                     name="Стоимость"
                                     label="Стоимость участия">
                             </v-text-field>
@@ -79,34 +79,37 @@
                     </v-layout>
                     <v-layout row wrap>
                         <v-flex xs12 md3 lg2 >
-                            <v-dialog v-model="startDateModal" lazy full-width>
-                                <v-text-field
-                                    slot="activator"
-                                    label="Дата начала"
-                                    prepend-icon="today"
-                                    locale="ru-RU"
-                                    v-model="event.startDate"
-                                    :rules="[ function() {return (event.startDate !=null) || 'Выберите дату'}]"
-                                    readonly>
-                                </v-text-field>
-                                <v-date-picker
-                                    v-model="dataPickerDate"
-                                    scrollable
-                                    first-day-of-week="1"
-                                    locale="ru-RU"
-                                    :date-format="formatWithDots"
-                                    :formatted-value.sync="event.startDate"
-                                    :allowed-dates="dayTodayOrFuture">
-                                        <template scope="{ save }">
-                                            <v-card-actions>
-                                                <v-btn flat primary @click.native="save()">Сохранить</v-btn>
-                                            </v-card-actions>
-                                        </template>
-                                </v-date-picker>
-                            </v-dialog>
+                          <v-dialog
+
+                            v-model="startDateModal"
+                            lazy
+                            full-width
+                            width="290px"
+                          >
+                            <v-text-field
+                              slot="activator"
+                              label="Дата начала"
+                              v-model="event.startDate"
+                              prepend-icon="event"
+                              :rules="[ function() {return (event.startDate !=null) || 'Выберите дату'}]"
+                              readonly
+                            ></v-text-field>
+                            <v-date-picker
+                              v-model="event.startDate"
+                              scrollable
+                              actions
+                              autosave
+                              first-day-of-week="1"
+                              locale="ru-RU"
+                              :date-format="formatWithDots"
+                              :formatted-value.sync="event.startDate"
+                              :allowed-dates="dayTodayOrFuture">
+
+                            </v-date-picker>
+                          </v-dialog>
                         </v-flex>
                         <v-flex xs12 md3 lg2 offset-md1 offset-lg1>
-                            <v-dialog v-model="startTimeModal" lazy full-width>
+                            <v-dialog v-model="startTimeModal" lazy full-width width="290px">
                                 <v-text-field
                                         slot="activator"
                                         label="Время начала"
@@ -117,11 +120,6 @@
                                         readonly>
                                 </v-text-field>
                                 <v-time-picker v-model="event.startTime" actions format="24hr">
-                                    <template scope="{ save }">
-                                        <v-card-actions>
-                                            <v-btn flat primary @click.native="save()">Сохранить</v-btn>
-                                        </v-card-actions>
-                                    </template>
                                 </v-time-picker>
                             </v-dialog>
                         </v-flex>
@@ -143,8 +141,7 @@
 
 
 <script>
-    import moment from 'moment';
-    import api from '../../api'
+    import moment from 'moment'
 
     export default {
         name: 'create-event',
@@ -159,16 +156,28 @@
                 startDate: null,
                 startTime: null,
             },
-
+            today: "",
             valid: false,
             startDateModal: false,
             startTimeModal: false,
             dataPickerDate: null,
+            priceRules: [
+              (v) => !!v || 'Введите цену',
+              (v) => /^\d+$/.test(v) || 'только цифры'
+            ]
+
         }),
         methods: {
+            todayBegin: function (){
+              this.today = moment();
+              this.today.set({'hour': 0, 'minute': 0, 'second': 0, 'millisecond': 0});
+              this.today = this.today.format('x');
+            },
+
             dayTodayOrFuture: function (date) {
-                let today = new Date().setHours(0); // TODO 29.09.2017: эта шутка работает каждый раз
-                return date  >= today
+                let formattedDate = moment(date, 'YYYY-MM-DD');
+
+                return formattedDate >= this.today
             },
 
             createEvent: function () {
@@ -176,20 +185,16 @@
                     if (this.event.src == ''){
                         this.event.src = 'https://i.imgur.com/GgUceLi.png'
                     }
-                    /*this.$root.$store.dispatch('createEvents', this.event);*/
-                    let csrf = this.$root.$store.state.system.csrf.content;
-                    api.events.createEvent(this.event, {headers: {'X-XSRF-TOKEN': csrf }} ).then(
-                        response => { // success callback
-                            // TODO dispatch('loadEvents') вынести в отдельный API |?|?|?|;
-                            let event = JSON.parse(response.bodyText);
-                            this.$root.$router.push({ path: '/event/' + event.id})
-                        },
-                        response => { // error callback
-                            console.log("error create event")
-                            console.log(response);
-                        }
-                    );
-//                    this.$refs.form.reset();
+                    this.formatWithDots(this.event);
+                    this.$http.post('/events', this.event, {headers: {'content-Type': 'application/json'}}).then(response => { //TODO: указать норм путь при деплое
+                      console.log(response);
+                      let event = JSON.parse(response.bodyText);
+                      this.$root.$router.push({ path: '/event/' + event.id})
+                    }, response => {
+                      console.log(' err create event begin')
+                      console.log(response)
+                      console.log(' err create event ending')
+                    });
                     this.event = {
                         title: "",
                         description: "",
@@ -202,12 +207,15 @@
                     }
                 }
             },
-            formatWithDots: function (date) {
-                if (date !== null) {
-                    return moment(date, 'YYYY-MM-DD').format('DD.MM.YY');
-                }
+            formatWithDots: function (event) {
+              let date = event.startDate;
+              event.startDate = moment(date, 'YYYY-MM-DD').format('DD.MM.YYYY');
+              return event
             }
-        }
+        },
+        created () {
+          this.todayBegin()
+        },
     }
 </script>
 

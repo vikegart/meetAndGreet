@@ -50,7 +50,6 @@
 
 <script>
     import moment from 'moment';
-    /*import api from '../../api';*/
 
     export default {
         name: 'event',
@@ -109,36 +108,21 @@
                         description:"Такой встречи нет. Не повезло. " ,
                         src: 'https://pp.userapi.com/c836324/v836324134/655b0/VlgO6dfohc8.jpg'
                     };
-                  let Elevent1 = {
-                    id: "1414",
-                    title: 'Прогулка с Элли',
-                    description:"Болтовная в кофейне" ,
-                    src: 'https://i.ytimg.com/vi/xLaeOrDmWQ4/hqdefault.jpg',
-                    startDate: "14.01.2018",
-                    startTime: "19:00",
-                    price: 0,
-                    location: "Coffe 3",
-
-                  };
-                  let Elevent2 = {
-                    id: "2805",
-                    title: 'Прогулка с Элли',
-                    description:"Болтовная в кофейне" ,
-                    src: 'https://i.ytimg.com/vi/xLaeOrDmWQ4/hqdefault.jpg',
-                    startDate: "15.01.2018",
-                    startTime: "19:00",
-                    price: 0,
-                    location: "Coffe 3",
-
-                  };
 
                     let id = this.$root.$route.params.id;
-                    if (id == 1414){
-                      this.event = Elevent1
-                    }
-                    if (id ==2805){
-                      this.event = Elevent2
-                    }
+                    this.$http.get('/events/' + id).then(response => { //TODO: указать норм путь при деплое
+                      console.log(response)
+                      let getEvent = JSON.parse(response.bodyText);
+                      this.event  = getEvent;
+
+
+                    }, response => {
+                      console.log(' err response begin')
+                      console.log(response)
+                      console.log(' err response ending')
+                      this.event  = emptyEvent;
+                    });
+
                 }
             }
         },

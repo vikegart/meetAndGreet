@@ -36,7 +36,7 @@
                                         </div>
                                         <v-flex class="metoo-event-card-title-info">
                                             <div class="metoo-event-card-title-info-text mb-0 mt-0" > {{event.title}} </div>
-                                            <p class="text-sm-left subheading grey--text">{{event.price}}</p>
+                                            <p class="text-sm-left subheading grey--text">{{event.price | priceFormatter}}</p>
                                         </v-flex>
                                     </v-layout>
                                 </v-card-title>
@@ -53,33 +53,26 @@
 
 <script>
     import moment from 'moment';
-    /*import api from '../../api';*/
 
     export default {
         name: 'find-event',
         data: () => ({
+            interval: {},
             findFinlter: "",
-            dateFrom:   (moment().day() == 0 ? moment().day(-6) : moment().day(1)), // по умолчанию на текущую неделю будет
-            dateTo:     (moment().day() == 0 ? moment() : moment().day(7)),
             modal: false,
             freeOnly: false,
-            alertAboutLogin: false,
             cachedScroll: null,
-            dataPickerDialog: false,
             picker: null,
-            events: [],
+            allEvents: [],
         }),
         computed: {
-            /*events: function() {
-                let events = this.$root.$store.state.events.events;
+            events: function() {
+                let events = this.allEvents;
 
                 return events.filter(function (event) {
                     let flag = true;
                     flag = flag && (!this.freeOnly || event.price == 0); // либо нет флага что бесплатно, либо цена равно 0
-                    flag = flag && (event.startDate.isSameOrBefore(this.dateTo, "date"));  // проверяем на дату начала
-                    flag = flag && (event.startDate.isSameOrAfter(this.dateFrom, "date"));  // проверяем на дату конца
 
-                    // TODO 22.09.17 пока сделана фильтрация только по названию, нужно добавить по тегам и мб по описанию.
                     let searchFilter = this.findFinlter;
                     if (searchFilter != "") {
                         searchFilter = searchFilter.toLowerCase();
@@ -88,7 +81,7 @@
 
                     return flag;
                 }, this)// передаем vue экземпляр для callback
-            },*/
+            },
 
 
         },
@@ -111,6 +104,21 @@
             }
         },
         methods: {
+            loadEvents: function() {
+              this.$http.get('/events').then(response => { //TODO: указать норм путь при деплое
+                let getEvents = JSON.parse(response.bodyText);
+                let eventsArray = getEvents._embedded.events;
+                this.allEvents  = eventsArray;
+                //TODO: положить это в метод и вызывать его раз в 5 секунд
+
+
+              }, response => {
+                console.log(' err response begin')
+                console.log(response)
+                console.log(' err response ending')
+              });
+            },
+
             switchPage: function(link) {
                 this.$root.$router.push({ path: link });
             },
@@ -123,20 +131,15 @@
         watch: {
             '$route': 'scrollPage' //когда мы вернулись сюда с другой страницы (изменился маршрут)
         },
-        created () {
-          this.$http.get('http://127.0.0.1:8033/events').then(response => {
-            let getEvents = JSON.parse(response.bodyText);
-            let eventsArray = getEvents._embedded.events;
-            console.log(eventsArray);
-            this.events  = eventsArray;
-            //TODO: положить это в метод
 
+        beforeDestroy () {
+          clearInterval(this.interval)
+        },
 
-          }, response => {
-            console.log(' err response begin')
-            console.log(response)
-            console.log(' err response ending')
-          });
+        mounted () {
+          this.interval = setInterval(() => {
+            this.loadEvents();
+          }, 3000)
         },
         beforeRouteLeave (to, from, next) { //когда уходим со страницы, сохраняем текущий скролл
             this.cachedScroll = window.pageYOffset;

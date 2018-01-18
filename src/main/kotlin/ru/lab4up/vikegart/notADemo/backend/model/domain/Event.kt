@@ -14,6 +14,7 @@ class Event(
         val title: String,
         val src: String,
         val price: Long,
+        val description: String,
         val startDate: String,
         val startTime: String,
         val location: String)

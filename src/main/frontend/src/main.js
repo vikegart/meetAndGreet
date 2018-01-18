@@ -1,17 +1,14 @@
 import Vue from 'vue'
 import App from './components/App.vue'
 import VueRouter from 'vue-router'
-import store from './store'
 import Vuetify from 'vuetify'
 import './stylus/main.styl'
 import VueResource from 'vue-resource'
 
-import FindEvent        from './components/pages/FindEvent.vue'
-import FavoriteEvents   from './components/pages/FavoriteEvents.vue'
-import HistoryEvents    from './components/pages/HistoryEvents.vue'
-import CreateEvent      from './components/pages/CreateEvent.vue'
-import MyEvent          from './components/pages/MyEvent.vue'
-import Event            from './components/pages/Event.vue'
+import FindEvent from './components/pages/FindEvent.vue'
+import CreateEvent from './components/pages/CreateEvent.vue'
+import Event from './components/pages/Event.vue'
+import About from './components/pages/About.vue'
 
 Vue.use(Vuetify);
 Vue.use(VueRouter);
@@ -32,21 +29,15 @@ let router = new VueRouter({
             path: '/event/:id',
             components: { default: Event}
         }, {
-            name: 'favorites',
-            path: '/favorite',
-            components: { default: FavoriteEvents }
-        }, {
-            name: 'history',
-            path: '/history',
-            components: { default: HistoryEvents }
+            name: 'about',
+            path: '/about',
+            components: {default: About}
         }
-
     ]
 });
 
 new Vue({
     el: '#app',
     router: router,
-    store: store,
     render: h => h(App)
 });
