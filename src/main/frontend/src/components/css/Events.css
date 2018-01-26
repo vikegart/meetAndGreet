@@ -101,3 +101,8 @@
     padding-bottom: 0px;
     color: dimgrey;
 }
+
+.loading-spinner{
+  position: inherit;
+  padding-top: 400px;
+}

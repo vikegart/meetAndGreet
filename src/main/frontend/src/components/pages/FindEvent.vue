@@ -19,6 +19,9 @@
         <v-container fluid pa-0 class="metoo-events-container">
             <v-layout row wrap>
                 <v-flex xs12 md6 lg4 style="margin-bottom: 100px;">
+                  <v-flex class="metoo-event-card">
+                    <v-progress-circular v-show="eventsIsLoad" indeterminate :size="220" :width="3" color="primary" style="position: initial"></v-progress-circular>
+                  </v-flex>
                     <v-flex v-for="event in events" :key="event.title">
                         <v-card class="metoo-event-card" :id="event.id">
                             <div @click="switchPage('/event/' + event.id )">
@@ -62,7 +65,7 @@
             modal: false,
             freeOnly: false,
             cachedScroll: null,
-            picker: null,
+            eventsIsLoad: true,
             allEvents: [],
         }),
         computed: {
@@ -108,14 +111,26 @@
               this.$http.get('/events').then(response => { //TODO: указать норм путь при деплое
                 let getEvents = JSON.parse(response.bodyText);
                 let eventsArray = getEvents._embedded.events;
+                this.eventsIsLoad = false;
                 this.allEvents  = eventsArray;
-                //TODO: положить это в метод и вызывать его раз в 5 секунд
 
 
               }, response => {
                 console.log(' err response begin')
                 console.log(response)
                 console.log(' err response ending')
+
+                this.eventsIsLoad = false;
+
+                /*if (this.allEvents.length == 0){ //TODO: если на странице нет ивентов, и с сервера плохой ответ
+                  let emptyEvent = {
+                    id: "-1",
+                    title: 'Что-то с сервером',
+                    description:"С твоим сервером что-то не так" ,
+                    src: 'https://pp.userapi.com/c836324/v836324134/655b0/VlgO6dfohc8.jpg'
+                  };
+                  this.allEvents = [emptyEvent]
+                }*/
               });
             },
 
