@@ -31,3 +31,4 @@ src/main/resources/static/static/js/manifest.d8669c60211c064aae11.js
 src/main/resources/static/static/js/manifest.d8669c60211c064aae11.js.map
 src/main/resources/templates/
 /src/main/frontend/dist/
+!/src/main/frontend/build/

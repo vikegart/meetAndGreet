@@ -111,7 +111,6 @@
 
                     let id = this.$root.$route.params.id;
                     this.$http.get('/events/' + id).then(response => { //TODO: указать норм путь при деплое
-                      console.log(response)
                       let getEvent = JSON.parse(response.bodyText);
                       this.event  = getEvent;
 
@@ -128,6 +127,10 @@
         },
         watch: {
             '$route': 'loadEvent' // в случае изменения маршрута запрашиваем данные вновь
+        },
+        beforeRouteLeave (to, from, next) { //когда уходим со страницы, чистим ивент
+          this.event  = {};
+          next();
         },
         created () {
             this.loadEvent();
