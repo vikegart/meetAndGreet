@@ -1,6 +1,6 @@
-# y
+# frontend
 
-> web interface for avito parser 
+> web app for meetgreet 
 
 ## Build Setup
 
@@ -19,3 +19,5 @@ npm run build --report
 ```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
+builded file paste in "resourses folder", to be served on Spring
