@@ -1,6 +1,6 @@
 # meetAndGreet
-курсач
+курсач,
 сервер на котлине, веб клиент на вью
 
-[meetgreet.cf](http://meetgreet.cf)
+[meetgreet.ml](http://meetgreet.ml)
 
