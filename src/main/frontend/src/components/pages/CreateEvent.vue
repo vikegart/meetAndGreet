@@ -186,16 +186,11 @@
                         this.event.src = 'https://i.imgur.com/GgUceLi.png'
                     }
                     this.formatWithDots(this.event);
-                    this.$http.post('/events', this.event, {headers: {'content-Type': 'application/json'}}).then(response => { //TODO: указать норм путь при деплое
+                    this.$http.post('/events', this.event, {headers: {'content-Type': 'application/json'}}).then(response => {
                       console.log(response);
                       let event = JSON.parse(response.bodyText);
-                      this.$root.$router.push({ path: '/event/' + event.id})
-                    }, response => {
-                      console.log(' err create event begin')
-                      console.log(response)
-                      console.log(' err create event ending')
-                    });
-                    this.event = {
+                      this.$root.$router.push({ path: '/event/' + event.id});
+                      this.event = {
                         title: "",
                         description: "",
                         src: "",
@@ -204,7 +199,13 @@
                         price: 0,
                         startDate: null,
                         startTime: null,
-                    }
+                      }
+                    }, response => {
+                      console.log(' err create event begin')
+                      console.log(response)
+                      console.log(' err create event ending')
+                    });
+                    
                 }
             },
             formatWithDots: function (event) {
